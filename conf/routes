@@ -7,3 +7,11 @@ GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+GET     /rest/                       controllers.Neo4J.root()
+GET     /rest/node                   controllers.Neo4J.node(id:Int)
+POST    /rest/node                   controllers.Neo4J.createNode()
+POST    /rest/node/prop              controllers.Neo4J.createNodeWithProperties()
+
+GET     /rest/rel                    controllers.Neo4J.relationship(id:Int)
+POST    /rest/rel                    controllers.Neo4J.createRelationship()
