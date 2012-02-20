@@ -7,6 +7,7 @@ package utils.dispatch
 
 import dispatch._
 import play.api.libs.json._
+import play.api.libs.json.Json._
 import models.Model
 
 
