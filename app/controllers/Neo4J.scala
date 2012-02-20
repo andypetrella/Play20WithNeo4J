@@ -1,6 +1,7 @@
 package controllers
 
 import play.api.mvc._
+import play.api.data._
 import play.api.libs.json._
 import play.api.libs.json.Json._
 import dispatch._
@@ -21,8 +22,7 @@ object Neo4J extends Controller {
 
   def node(id: Int) = Action {
     val node = Http(neo.neoRestNodeById(id) <:< Map("Accept" -> "application/json") >! {
-      jsValue =>
-        (jsValue \ "self").as[String]
+      jsValue => (jsValue \ "self").as[String]
     })
     Ok(node)
   }

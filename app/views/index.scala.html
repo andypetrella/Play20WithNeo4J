@@ -1,7 +1,23 @@
 @(message: String)
 
-@main("Welcome to Play 2.0") {
-    
-    @play20.welcome(message)
-    
+@main("Welcome to Play 2.0 And Neo4J") {
+<a href="@routes.Neo4J.root">Root</a>
+<hr/>
+<a href="@routes.Neo4J.node(1)">Node 1</a>
+<hr/>
+<form id="createNode" action="@routes.Neo4J.createNode" method="POST">
+    <a href="#" onclick="document.getElementById('createNode').submit()">Create Node</a>
+</form>
+<hr/>
+<form id="createNodeWithProperties" action="@routes.Neo4J.createNodeWithProperties" method="POST">
+    <a href="#" onclick="document.getElementById('createNodeWithProperties').submit()">Create Node with Props</a>
+</form>
+<hr/>
+<a href="@routes.Neo4J.relationship(1)">Relationship 1</a>
+<hr/>
+<form id="createRelationship" action="@routes.Neo4J.createRelationship" method="POST">
+    <a href="#" onclick="document.getElementById('createRelationship').submit()">Create Relationship</a>
+</form>
+<hr/>
+
 }
