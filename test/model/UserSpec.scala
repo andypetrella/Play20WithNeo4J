@@ -14,7 +14,7 @@ class UserSpec extends Specification {
       "is save with an id" ! {
         running(FakeApplication()) {
           val user:User = User(null.asInstanceOf[Int], "I'm you")
-          val saved: User = graph.saveNode(user)
+          val saved: User = user.save
           userId = saved.id
           saved.id must beGreaterThanOrEqualTo(0)
         }
