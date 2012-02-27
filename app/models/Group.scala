@@ -16,7 +16,7 @@ case class Group(id: Int, name: String) extends Model[Group] {
   }
 
   def users : List[User] = {
-    graph.relationTargets[User](this, User.IS_IN)
+    graph.relationSources[User](this, User.IS_IN)
   }
 }
 

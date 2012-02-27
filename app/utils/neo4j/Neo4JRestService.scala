@@ -67,6 +67,23 @@ trait Neo4JRestService extends GraphService[Model[_]] {
 
   def allNodes[T <: Model[_]](implicit m: ClassManifest[T], f: Format[T]): List[T] = relationTargets(root, Model.kindOf[T])
 
+  def relationSources[T <: Model[_]](target: Model[_], rel: String)(implicit m: ClassManifest[T], f: Format[T]): List[T] = {
+    val cypher = """
+      start x=node({ref})
+      match s-[:{rel}]->x
+      return s
+      """
+      .replaceAllLiterally("{ref}", target.id.toString)
+      .replaceAllLiterally("{rel}", rel)
+
+    val props = JsObject(Seq(
+      "query" -> JsString(cypher),
+      "params" -> JsObject(Seq())
+    ))
+
+    Http(neoRestCypher <<(stringify(props), "application/json") >^*> { (_: Iterable[T]).toList })
+  }
+
   def relationTargets[T <: Model[_]](start: Model[_], rel: String)(implicit m: ClassManifest[T], f: Format[T]): List[T] = {
     val cypher = """
       start x=node({ref})
