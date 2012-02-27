@@ -1,24 +1,39 @@
 @(message: String)
 
 @main("Welcome to Play 2.0 And Neo4J") {
-<a href="@routes.Neo4J.root">Root</a>
+<div>
+    <h4>Create User</h4>
+    <label for="create_user_firstName">First Name</label>
+    <input id="create_user_firstName" type="text" name="firstname">
+    <button id="create_user" value="Create User">Create User</button>
+</div>
 <hr/>
-<a href="@routes.Neo4J.node(1)">Node 1</a>
+<div>
+    <h4>Create Group</h4>
+    <label for="create_group_name">Name</label>
+    <input id="create_group_name" type="text" name="name">
+    <button id="create_group" value="Create User">Create Group</button>
+</div>
 <hr/>
-<form id="createNode" action="@routes.Neo4J.createNode" method="POST">
-    <a href="#" onclick="document.getElementById('createNode').submit()">Create Node</a>
-</form>
+<div>
+    <h4>User knows another</h4>
+    <label for="knows_start">User</label>
+    <input id="knows_start" type="number" name="start">
+    <br/>
+    <label for="knows_end">Known</label>
+    <input id="knows_end" type="number" name="end">
+    <button id="knows" value="Link Them">Link Them</button>
+</div>
 <hr/>
-<form id="createNodeWithProperties" action="@routes.Neo4J.createNodeWithProperties" method="POST">
-    <a href="#" onclick="document.getElementById('createNodeWithProperties').submit()">Create Node with Props</a>
-</form>
-<hr/>
-<a href="@routes.Neo4J.relationship(1)">Relationship 1</a>
-<hr/>
-<form id="createRelationship" action="@routes.Neo4J.createRelationship" method="POST">
-    <a href="#" onclick="document.getElementById('createRelationship').submit()">Create Relationship</a>
-</form>
-<hr/>
+<div>
+    <h4>User is in a group</h4>
+    <label for="grouping_user">User</label>
+    <input id="grouping_user" type="number" name="user">
+    <br/>
+    <label for="grouping_group">Group</label>
+    <input id="grouping_group" type="number" name="group">
+    <button id="grouping" value="Add to Group">Add to Group</button>
+</div>
 
 <div>
 <select name="groups" id="groups">

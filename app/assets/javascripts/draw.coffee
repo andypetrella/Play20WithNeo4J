@@ -1,5 +1,41 @@
 
 $ ->
+    $("#create_user").bind "click", (event) =>
+      $.post(
+        playRoutes.controllers.Users.create().url
+        {
+          "firstname" : $("#create_user_firstName").val()
+        }
+        (ok) ->
+      )
+
+    $("#knows").bind "click", (event) =>
+      $.post(
+        playRoutes.controllers.Users.userKnows($("#knows_start").val()).url
+        {
+          "knows[0]" : $("#knows_end").val()
+        }
+        (ok) ->
+      )
+
+    $("#create_group").bind "click", (event) =>
+      $.post(
+        playRoutes.controllers.Groups.create().url
+        {
+          "name" : $("#create_group_name").val()
+        }
+        (ok) ->
+      )
+
+    $("#grouping").bind "click", (event) =>
+      $.post(
+        playRoutes.controllers.Groups.addUsers($("#grouping_group").val()).url
+        {
+          "user[0]" : $("#grouping_user").val()
+        }
+        (ok) ->
+      )
+
     Renderer = (canvas) ->
       canvas = $(canvas).get(0)
       ctx = canvas.getContext("2d");
@@ -41,6 +77,7 @@ $ ->
               ctx.fill()
               ctx.stroke()
             else
+              #draw body
               ctx.beginPath()
               ctx.moveTo(pt.x, pt.y-w/2)
               ctx.lineTo(pt.x+w/2, pt.y+w/2)
@@ -48,36 +85,45 @@ $ ->
               ctx.lineTo(pt.x, pt.y-w/2)
               ctx.fillStyle = "blue"
               if (node.data.enabledGroup)
-                ctx.lineWidth = 3
-                ctx.strokeStyle = "red";
+                ctx.lineWidth = 5
+                ctx.strokeStyle = "rgba(255,0,0, .333)";
               else
                 ctx.lineWidth = 1
                 ctx.strokeStyle = "black";
               ctx.fill()
               ctx.stroke()
 
+              #draw head
               ctx.beginPath()
-              ctx.arc(pt.x, pt.y-w/2, w/2, 2 * Math.PI, false)
+              ctx.arc(pt.x, pt.y-w/2, w/3, 2 * Math.PI, false)
 
               ctx.fillStyle = "blue"
               if (node.data.enabledGroup)
                 ctx.lineWidth = 3
-                ctx.strokeStyle = "red";
+                ctx.strokeStyle = "rgba(255,0,0, .333)";
               else
                 ctx.lineWidth = 1
                 ctx.strokeStyle = "black";
               ctx.fill()
               ctx.stroke()
 
-              ctx.fillText(node.data.firstName, pt.x, pt.y+w);
+              #draw first name adn node id
+              ctx.fillText(node.data.id + " - " + node.data.firstName, pt.x, pt.y+w);
           )
 
         initMouseHandling: () =>
-          $(canvas).bind "mousedown", (e) =>
+          #on mousedown => select the nearest node and show all edges starting from it
+          $(canvas).bind "click", (e) =>
             pos = $(canvas).offset();
             _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
             node = particleSystem.nearest(_mouseP)
             node = node.node
+            #first remove all other knows links
+            particleSystem.eachEdge((edge, pt1, pt2) =>
+                if (edge.data.type && edge.data.type is "knows")
+                  particleSystem.pruneEdge(edge)
+            )
+
             $.get(
                 playRoutes.controllers.Users.j_knows(node.data.id).url
                 (knows) =>
@@ -91,26 +137,34 @@ $ ->
 
     users = {}
 
-    drawUsers = () =>
-      nodes = []
-
+    start = () =>
+      #create the Particle System
       sys = arbor.ParticleSystem(1000, 600, 0.5) #// create the system with sensible repulsion/stiffness/friction
       sys.parameters({gravity:true}) #// use center-gravity to make the graph settle nicely (ymmv)
       sys.renderer = Renderer("#viewport") #// our newly created renderer will have its .init() method called shortly by sys...
 
-      nodes.push(sys.addNode("user-"+k, u)) for k,u of users
-
+      #create a virtual root node
       root = sys.addNode("root", {root:true})
-      sys.addEdge(root, n) for n in nodes
 
+      for k,u of users
+        #add all users as Node to the graph
+        n = sys.addNode("user-"+k, u)
+        #to which all users will be connected
+        sys.addEdge(root, n)
+
+
+
+      #get all groups and render them in the select
       $.get(
-          playRoutes.controllers.Groups.j_all().url
-          (gs) ->
-            $("#groups").append($("<option value='"+ g.id + "'>" + g.name + "</option>")) for g in gs
+        playRoutes.controllers.Groups.j_all().url
+        (gs) ->
+          $("#groups").append($("<option value='"+ g.id + "'>" + g.id + "-" + g.name + "</option>")) for g in gs
       )
 
+      #when changing group, highlight the users participating in
       $("#groups").bind "change", (event) =>
-        groupId = $("#groups option:selected").val()
+        groupId = parseInt($("#groups option:selected").val())
+
         if (groupId isnt -1)
           $.get(
             playRoutes.controllers.Groups.j_users(groupId).url
@@ -125,13 +179,19 @@ $ ->
               )
               sys.renderer.redraw()
           )
+        else
+          sys.eachNode((n, pt) =>
+            n.data.enabledGroup = false
+          )
+          sys.renderer.redraw()
 
 
+    #Get all users and add them to the graph
     routeToAllUsers = playRoutes.controllers.Users.j_all().url
     $.get(
-        routeToAllUsers
-        (us) ->
-          users[u.id] = u for u in us
-          drawUsers()
+      routeToAllUsers
+      (us) ->
+        users[u.id] = u for u in us
+        start()
     )
 
