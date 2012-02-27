@@ -1,6 +1,8 @@
 @(message: String)
 
-@main("Welcome to Play 2.0 And Neo4J") {
+@main("Play 2.0 And Neo4J") {
+<h1>Use Play 2.0 together with Neo4J</h1>
+<h2>Create some data on the fly</h2>
 <div>
     <h4>Create User</h4>
     <label for="create_user_firstName">First Name</label>
@@ -17,31 +19,32 @@
 <hr/>
 <div>
     <h4>User knows another</h4>
-    <label for="knows_start">User</label>
+    <label for="knows_start">User Id</label>
     <input id="knows_start" type="number" name="start">
     <br/>
-    <label for="knows_end">Known</label>
+    <label for="knows_end">Known Id</label>
     <input id="knows_end" type="number" name="end">
     <button id="knows" value="Link Them">Link Them</button>
 </div>
 <hr/>
 <div>
     <h4>User is in a group</h4>
-    <label for="grouping_user">User</label>
+    <label for="grouping_user">User Id</label>
     <input id="grouping_user" type="number" name="user">
     <br/>
-    <label for="grouping_group">Group</label>
+    <label for="grouping_group">Group Id</label>
     <input id="grouping_group" type="number" name="group">
     <button id="grouping" value="Add to Group">Add to Group</button>
 </div>
 
 <div>
+<h2>Select a group to see its users highlighted</h2>
 <select name="groups" id="groups">
     <option value="-1">---</option>
 </select>
 </div>
 
-
+<h2>Click on node to see how it is linked with others</h2>
 <canvas id="viewport" width="800" height="600"></canvas>
 
 }

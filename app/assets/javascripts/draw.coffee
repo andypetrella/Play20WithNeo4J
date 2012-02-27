@@ -1,41 +1,5 @@
 
 $ ->
-    $("#create_user").bind "click", (event) =>
-      $.post(
-        playRoutes.controllers.Users.create().url
-        {
-          "firstname" : $("#create_user_firstName").val()
-        }
-        (ok) ->
-      )
-
-    $("#knows").bind "click", (event) =>
-      $.post(
-        playRoutes.controllers.Users.userKnows($("#knows_start").val()).url
-        {
-          "knows[0]" : $("#knows_end").val()
-        }
-        (ok) ->
-      )
-
-    $("#create_group").bind "click", (event) =>
-      $.post(
-        playRoutes.controllers.Groups.create().url
-        {
-          "name" : $("#create_group_name").val()
-        }
-        (ok) ->
-      )
-
-    $("#grouping").bind "click", (event) =>
-      $.post(
-        playRoutes.controllers.Groups.addUsers($("#grouping_group").val()).url
-        {
-          "user[0]" : $("#grouping_user").val()
-        }
-        (ok) ->
-      )
-
     Renderer = (canvas) ->
       canvas = $(canvas).get(0)
       ctx = canvas.getContext("2d");
@@ -135,7 +99,11 @@ $ ->
       }
 
 
+
+
     users = {}
+
+
 
     start = () =>
       #create the Particle System
@@ -146,19 +114,68 @@ $ ->
       #create a virtual root node
       root = sys.addNode("root", {root:true})
 
-      for k,u of users
-        #add all users as Node to the graph
-        n = sys.addNode("user-"+k, u)
+      addUser = (u) =>
+        n = sys.addNode("user-"+u.id, u)
         #to which all users will be connected
         sys.addEdge(root, n)
 
 
+      #add all users as Node to the graph
+      addUser(u) for k,u of users
+
+
+      #create an User
+      $("#create_user").bind "click", (event) =>
+        $.post(
+          playRoutes.controllers.Users.create().url
+          {
+            "firstname" : $("#create_user_firstName").val()
+          }
+          (user) -> addUser(user)
+        )
+
+      #links two users
+      $("#knows").bind "click", (event) =>
+        $.post(
+          playRoutes.controllers.Users.userKnows($("#knows_start").val()).url
+          {
+            "knows[0]" : $("#knows_end").val()
+          }
+          (ok) ->
+        )
+
+
+
+
+      #add the group to the select
+      addGroup = (g) =>
+        $("#groups").append($("<option value='"+ g.id + "'>" + g.id + "-" + g.name + "</option>"))
+
+      #create a group
+      $("#create_group").bind "click", (event) =>
+        $.post(
+          playRoutes.controllers.Groups.create().url
+          {
+            "name" : $("#create_group_name").val()
+          }
+          (group) -> addGroup(groupt)
+        )
+
+      #add user to a group
+      $("#grouping").bind "click", (event) =>
+        $.post(
+          playRoutes.controllers.Groups.addUsers($("#grouping_group").val()).url
+          {
+            "user[0]" : $("#grouping_user").val()
+          }
+          (ok) ->
+        )
 
       #get all groups and render them in the select
       $.get(
         playRoutes.controllers.Groups.j_all().url
         (gs) ->
-          $("#groups").append($("<option value='"+ g.id + "'>" + g.id + "-" + g.name + "</option>")) for g in gs
+          addGroup(g) for g in gs
       )
 
       #when changing group, highlight the users participating in
