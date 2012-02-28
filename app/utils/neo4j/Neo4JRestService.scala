@@ -15,7 +15,8 @@ import utils.persistence.GraphService
 
 trait Neo4JRestService extends GraphService[Model[_]] {
 
-  val neoRest = :/("localhost", 7474)
+  //val neoRest = :/("localhost", 7474)
+  val neoRest = :/("7455c1bc5.hosted.neo4j.org", 7000) as ("70246e3d8", "7c4d4b891")
   val neoRestBase = neoRest / "db" / "data"
   val neoRestNode = neoRestBase / "node"
   val neoRestRel = neoRestBase / "relationship"
@@ -29,6 +30,7 @@ trait Neo4JRestService extends GraphService[Model[_]] {
 
   def neoRestRelById(id: Int) = neoRestRel / id.toString
 
+  def buildUrl(u: String) = url(u) as ("70246e3d8", "7c4d4b891")
 
   //WARN :: the name conforms is mandatory to avoid conflicts with Predef.conforms for implicits
   // see https://issues.scala-lang.org/browse/SI-2811
@@ -129,7 +131,7 @@ trait Neo4JRestService extends GraphService[Model[_]] {
 
     //update the id property
     Http(
-      (url(property.replace("{key}", "id")) <<(id.toString, "application/json") PUT)
+      (buildUrl(property.replace("{key}", "id")) <<(id.toString, "application/json") PUT)
         <:< Map("Accept" -> "application/json") >| //no content
     )
 
@@ -176,7 +178,7 @@ trait Neo4JRestService extends GraphService[Model[_]] {
     ))
     //the request
     Http(
-      (url(createRelationship) <<(stringify(props), "application/json"))
+      (buildUrl(createRelationship) <<(stringify(props), "application/json"))
         <:< Map("Accept" -> "application/json")
         >! {
         jsValue => //((jsValue \ "self").as[String], (jsValue \ "data").as[JsObject])
