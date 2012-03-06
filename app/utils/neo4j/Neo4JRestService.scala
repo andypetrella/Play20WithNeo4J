@@ -16,7 +16,7 @@ import utils.persistence.GraphService
 trait Neo4JRestService extends GraphService[Model[_]] {
 
   //val neoRest = :/("localhost", 7474)
-  val neoRest = :/("7455c1bc5.hosted.neo4j.org", 7000) as ("70246e3d8", "7c4d4b891")
+  val neoRest = :/("7455c1bc5.hosted.neo4j.org", 7086) as ("70246e3d8", "7c4d4b891")
   val neoRestBase = neoRest / "db" / "data"
   val neoRestNode = neoRestBase / "node"
   val neoRestRel = neoRestBase / "relationship"
