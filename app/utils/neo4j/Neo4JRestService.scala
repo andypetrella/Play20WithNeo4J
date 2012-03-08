@@ -15,8 +15,9 @@ import utils.persistence.GraphService
 
 trait Neo4JRestService extends GraphService[Model[_]] {
 
-  //val neoRest = :/("localhost", 7474)
-  val neoRest = :/("7455c1bc5.hosted.neo4j.org", 7086) as ("70246e3d8", "7c4d4b891")
+  val neoRest = :/("localhost", 7474)
+  //val neoRest = :/(url, port) as ("user, pwd)
+
   val neoRestBase = neoRest / "db" / "data"
   val neoRestNode = neoRestBase / "node"
   val neoRestRel = neoRestBase / "relationship"
@@ -30,8 +31,8 @@ trait Neo4JRestService extends GraphService[Model[_]] {
 
   def neoRestRelById(id: Int) = neoRestRel / id.toString
 
-  //def buildUrl(u: String) = url(u)
-  def buildUrl(u: String) = url(u) as ("70246e3d8", "7c4d4b891")
+  //def buildUrl(u: String) = url(u) as (user, pwd)
+  def buildUrl(u: String) = url(u)
 
   //WARN :: the name conforms is mandatory to avoid conflicts with Predef.conforms for implicits
   // see https://issues.scala-lang.org/browse/SI-2811
