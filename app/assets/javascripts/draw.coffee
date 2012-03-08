@@ -163,7 +163,7 @@ $ ->
           {
             "name" : $("#create_group_name").val()
           }
-          (group) -> addGroup(groupt)
+          (group) -> addGroup(group)
         )
 
       #add user to a group
