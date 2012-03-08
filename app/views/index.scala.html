@@ -2,22 +2,22 @@
 
 @main("Play 2.0 And Neo4J") {
 <h1>Use Play 2.0 together with Neo4J</h1>
+
+<div id="main" class="column">
 <h2>Create some data on the fly</h2>
-<div>
+<div id="create_user_div" class="section">
     <h4>Create User</h4>
     <label for="create_user_firstName">First Name</label>
     <input id="create_user_firstName" type="text" name="firstname">
     <button id="create_user" value="Create User">Create User</button>
 </div>
-<hr/>
-<div>
+<div id="create_group_div" class="section">
     <h4>Create Group</h4>
     <label for="create_group_name">Name</label>
     <input id="create_group_name" type="text" name="name">
     <button id="create_group" value="Create User">Create Group</button>
 </div>
-<hr/>
-<div>
+<div id="user_knows_another_div" class="section">
     <h4>User knows another</h4>
     <label for="knows_start">User Id</label>
     <input id="knows_start" type="number" name="start">
@@ -26,8 +26,7 @@
     <input id="knows_end" type="number" name="end">
     <button id="knows" value="Link Them">Link Them</button>
 </div>
-<hr/>
-<div>
+<div id="user_is_in_group_div" class="section">
     <h4>User is in a group</h4>
     <label for="grouping_user">User Id</label>
     <input id="grouping_user" type="number" name="user">
@@ -37,14 +36,33 @@
     <button id="grouping" value="Add to Group">Add to Group</button>
 </div>
 
-<div>
+<div id="select_group_div" class="section">
 <h2>Select a group to see its users highlighted</h2>
 <select name="groups" id="groups">
     <option value="-1">---</option>
 </select>
 </div>
 
+</div>    
+    
+<div id="graph_div" class="column">
 <h2>Click on node to see how it is linked with others</h2>
 <canvas id="viewport" width="800" height="600"></canvas>
+</div>
+
+ <!-- **** DEMO **** -->
+<!-- Each tip is set within this <ol>. -->
+<!-- This creates the order the tips are displayed -->
+<ol id="demo">
+    <li data-id="create_user_div">Here create a user with giving its name</li>
+    <li data-id="graph_div">It appears here</li>
+    <li data-id="create_group_div">Create a group of user</li>
+    <li data-id="graph_div">It appears in the list</li>
+    <li data-id="user_knows_another_div">Link users by giving their ids (shown in the graph)</li>
+    <li data-id="graph_div">See the new link by clicking the first user</li>
+    <li data-id="user_is_in_group_div">And a user to a group (the group id is found in the list)</li>
+    <li data-id="select_group_div">Select it in the list</li>
+    <li data-id="graph_div">User being "highlighted" are part of the group</li>
+</ol>
 
 }

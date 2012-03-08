@@ -1,0 +1,25 @@
+body {
+background-color:   #A3ADAD
+}
+
+h1 {
+height:             150x;
+color:              #1A2B40;
+}
+
+h2 {
+color:              #494962;
+}
+
+.section {
+background-color:   #AAAAAA;
+width:              400px;
+border:             1px solid #529D73;
+color:              #494962;
+}
+
+.column {
+float:              left;
+display:            inline;
+margin:             0 0 0 20px;
+}

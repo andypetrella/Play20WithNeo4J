@@ -1,5 +1,10 @@
 
 $ ->
+    $(window).joyride({
+        tipContent: "#demo"
+        tipLocation: 'top'
+    })
+
     Renderer = (canvas) ->
       canvas = $(canvas).get(0)
       ctx = canvas.getContext("2d");

@@ -30,6 +30,7 @@ trait Neo4JRestService extends GraphService[Model[_]] {
 
   def neoRestRelById(id: Int) = neoRestRel / id.toString
 
+  //def buildUrl(u: String) = url(u)
   def buildUrl(u: String) = url(u) as ("70246e3d8", "7c4d4b891")
 
   //WARN :: the name conforms is mandatory to avoid conflicts with Predef.conforms for implicits
